@@ -12,3 +12,8 @@ To get everything going, it is recommended to clone this repository and install 
 - You can now activate the new environment with `source .venv/bin/activate` (Linux) or `.venv\Scripts\activate` (Windows)
 - Once activated, we can install new packages with 'uv add PACKAGENAME'. Not necessary for this workshop, all packages should already have been installed
 - To find the right kernel for your Jupyter Notebook, you might need to navigate to your workspace folder and run (all in terminal) `uv run python -m ipykernel install --user --name workshop --display-name "Workshop"`. The kernel shoud now appear under the name "Workshop".
+- To monitor training progress with TensorBoard, first install TensorBoard (if it is not already installed) and then start it from the project directory:
+```bash
+uv pip install tensorboard
+tensorboard --logdir=runs
+``
