@@ -5,12 +5,18 @@ from pathlib import Path
 
 # import relevant pytorch functions and packages
 import torch
+import torchvision
 from torch import nn
 from torchvision.datasets import MNIST
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 
 from model import MNISTClassifier_MLP
+
+from torch.utils.tensorboard import SummaryWriter
+
+# Writer will output to ./runs/ directory by default
+writer = SummaryWriter()
 
 ################################################
 ################### The Data ###################
@@ -51,11 +57,21 @@ val_loader = DataLoader(
 print("Dataloader created")
 
 ################################################
+#### Define the devide for model training ######
+################################################
+
+# Use GPU if its available, otherwise CPU
+device_to_use = ("cuda" if torch.cuda.is_available() else "cpu")
+print("The device is: ", device_to_use)
+
+################################################
 #### Define all model dependent variables ######
 ################################################
 
 # the model 
 model = MNISTClassifier_MLP()
+# ship model to device
+model = model.to(device_to_use)
 
 # the loss
 loss_function = nn.CrossEntropyLoss()
@@ -65,6 +81,18 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 # the number of epochs
 epochs = 5
+
+
+################################################
+#### Put an example image on the tensorboard ###
+################################################
+
+images, labels = next(iter(val_data))
+
+grid = torchvision.utils.make_grid(images)
+writer.add_image('images', grid, 0)
+writer.add_graph(model, images)
+#writer.close()
 
 ################################################
 ############# The actual training ##############
@@ -78,12 +106,13 @@ for epoch in range(epochs):
     # turn on training mode
     model.train()            
     # initialize loss for measuring its development over the epochs           
-    total_loss = 0.0                    
+    total_loss = 0.0
+    correct = 0.0
 
     for images, labels in train_loader: # iterate over every batch in the train_loader and retrieve images and labels 
 
-        images = images                                 # Maybe add the .device()
-        labels = labels
+        images = images.to(device_to_use)
+        labels = labels.to(device_to_use)
 
         # Set the gradients from the previous batch to 0 before calculating gradients for the current batch
         optimizer.zero_grad()           
@@ -96,10 +125,17 @@ for epoch in range(epochs):
         # Update the models training parameters according to the gradients            
         optimizer.step()                
         # Update the loss with the loss from this batch. Displaying purposes only
-        total_loss += loss.item()       
+        total_loss += loss.item()
+
+        predictions = logits.argmax(dim=1)
+        correct += (predictions == labels).sum().item()
 
     # Average the loss for this epoch
-    average_loss = total_loss / len(train_loader) 
+    average_loss = total_loss / len(train_loader)
+    accuracy = correct /len(train_loader)
+    
+    writer.add_scalar('Loss/train', average_loss, epoch + 1)
+    writer.add_scalar('Acc/train', accuracy, epoch + 1)
 
     ################################################################################################
     ################################################################################################
@@ -113,8 +149,8 @@ for epoch in range(epochs):
     with torch.no_grad():
         for images, labels in val_loader:
             
-            images = images                                 # Maybe add the .device()
-            labels = labels
+            images = images.to(device_to_use)                            # Maybe add the .device()
+            labels = labels.to(device_to_use)
 
             logits = model(images)                          # run the trained model on the validation data
             
@@ -133,7 +169,8 @@ for epoch in range(epochs):
     
     # Print the loss of each epoch. We want them to go down
     print(f"Epoch {epoch + 1}/{epochs}, training loss: {average_loss:.4f}, validation loss: {average_val_loss:.4f}, validation accuracy: {accuracy:.2%}") 
-    
+    writer.add_scalar('Loss/val', average_val_loss, epoch + 1)
+    writer.add_scalar('Acc/val', accuracy, epoch + 1)
     
 # After training, we save the final model for later usage
 
@@ -146,3 +183,4 @@ if not path_to_save_in.exists():
     path_to_save_in.mkdir(parents=True)
 
 torch.save(model.state_dict(), path_to_save_in / "digit_prediction_model.pth")
+writer.close()

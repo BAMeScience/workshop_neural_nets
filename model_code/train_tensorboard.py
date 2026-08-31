@@ -100,6 +100,10 @@ for epoch in range(epochs):
     correct = 0.0
 
     for images, labels in train_loader: # iterate over every batch in the train_loader and retrieve images and labels 
+
+        images = images                                 # Maybe add the .device()
+        labels = labels
+
         # Set the gradients from the previous batch to 0 before calculating gradients for the current batch
         optimizer.zero_grad()           
         # Call the model. Input: images (see forward function of model); Output: Vector with 10 entries
