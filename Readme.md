@@ -13,12 +13,12 @@ To get everything going, it is recommended to clone this repository and install 
 - Once activated, we can install new packages with 'uv add PACKAGENAME'. Not necessary for this workshop, all packages should already have been installed
 - To find the right kernel for your Jupyter Notebook, you might need to navigate to your workspace folder and run (all in terminal) `uv run python -m ipykernel install --user --name workshop --display-name "Workshop"`. The kernel shoud now appear under the name "Workshop".
 - To monitor training progress with TensorBoard, first install TensorBoard (if it is not already installed) and then start it from the project directory:
-``bash
+``
 uv pip install tensorboard
 tensorboard --logdir=runs
 ``
 
-## All-in-one code
+## All-in-one notebook
 The notebook "notebook_for_your_first_NN.ipynb" in this repository inludes everything we looked at in the workshop. You need to execute each line individually, starting from the top.
 
 Additionally, it includes the code for a Convolutional Neural Network that you can also train on your CPU to compare the results.
