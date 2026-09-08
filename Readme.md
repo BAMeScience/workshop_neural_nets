@@ -17,3 +17,8 @@ To get everything going, it is recommended to clone this repository and install 
 uv pip install tensorboard
 tensorboard --logdir=runs
 ``
+
+## All-in-one code
+The notebook "notebook_for_your_first_NN.ipynb" in this repository inludes everything we looked at in the workshop. You need to execute each line individually, starting from the top.
+
+Additionally, it includes the code for a Convolutional Neural Network that you can also train on your CPU to compare the results.
