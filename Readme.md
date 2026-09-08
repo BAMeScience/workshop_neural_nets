@@ -15,6 +15,8 @@ To get everything going, it is recommended to clone this repository and install 
 - To monitor training progress with TensorBoard, first install TensorBoard (if it is not already installed) and then start it from the project directory:
 ``
 uv pip install tensorboard
+``
+``
 tensorboard --logdir=runs
 ``
 
