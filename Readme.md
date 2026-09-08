@@ -3,7 +3,7 @@
 This repository contains all the necessary code for the Workshop "Your first Neural Network in PyTorch – An Introduction".
 The material follows the workshop structure closely, the final code includes two simple neural networks for classifying digits. For training and validation, the MNIST dataset is downloaded und used.
 
-To get everything going, it is recommended to clone this repository and install all packages with the provided .toml file. Thereto, open the terminal (VDI/Linux) or the command prompt (Windows). In the terminal:
+To get everything going, it is recommended to clone this repository and install all packages with the provided .toml file. Thereto, open the terminal (Linux) or the command prompt (Windows). In the terminal:
 - Navigate to your designated project path (`cd PROJECTPATH`) and create a new folder (`mkdir FOLDERNAME`) 
 - Enter the new folder with `cd FOLDERNAME` and clone this repository using `git clone https://github.com/BAMeScience/workshop_neural_nets.git` or download the repository by hand and unzip in the new folder
 - In the terminal, from your project path, execute `cd workshop_neural_nets` (you are now in the workshop folder)
